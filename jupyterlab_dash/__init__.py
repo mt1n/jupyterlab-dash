@@ -20,10 +20,12 @@ class StdErrorQueue(object):
 class AppViewer(object):
     _dash_comm = Comm(target_name='dash_viewer')
 
-    def __init__(self, port=8050):
+    def __init__(self, port=8050, host='127.0.0.1', hostname='localhost'):
         self.server_process = None
         self.uid = str(uuid.uuid4())
         self.port = port
+        self.host = host
+        self.hostname = hostname
         self.stderr_queue = StdErrorQueue()
 
     def show(self, app):
@@ -63,7 +65,7 @@ class AppViewer(object):
             self._dash_comm.send({
                 'type': 'show',
                 'uid': self.uid,
-                'url': 'http://localhost:{}'.format(self.port)
+                'url': 'http://{0}:{1}'.format(self.hostname,self.port)
             })
         else:
             # Failed to start development server
